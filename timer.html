@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="nl-NL">
+<head>
+<title>Brandpunt timer</title>
+<script src="http://code.jquery.com/jquery-1.4.4.js"></script>
+<script type="text/javascript">
+
+var count=15*60+1; // 15 minuten. 
+
+
+//var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
+
+function timer() {
+	count=count-1;
+	if (count <= 0)	{
+		clearCounter();
+		document.getElementById("timer").innerHTML="Applaus!"; // watch for spelling  
+		return;
+	}
+
+	//Do code for showing the number of seconds here
+	//var min = count % 60;
+	//var sec = count / 60;
+	var minutes = Math.floor(count / 60);
+	var seconds = count - minutes * 60;
+	document.getElementById("timer").innerHTML=minutes + ":" + pad(seconds, 2, 0);
+}
+
+function pad(n, width, z) {
+  z = z || '0';
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
+function restart() {
+    clearCounter();
+	var count=15*60+1; // 15 minuten. 
+	counter=setInterval(timer, 1000); //1000 will  run it every 1 second	
+}
+
+function clearCounter() {
+    if (typeof counter === 'undefined') {
+        console.log("No counter cleared");
+    } else {
+        clearInterval(counter);
+        console.log("Counter cleared");
+    }
+}
+function cls() {
+        document.getElementById("timer").innerHTML=""; 
+        document.getElementById("welkom").innerHTML=""; 
+        document.getElementById("copyright").innerHTML="";
+}
+
+function myFunction() {
+	console.log(event.keyCode);
+}
+
+$(document).keydown(function(event) {
+	if (event.keyCode == '65') {
+        // A = Applaus
+        clearCounter();
+        
+		console.log("Applaus!");
+		cls();
+		document.getElementById("timer").innerHTML="Applaus!";
+        
+		count = 0;
+	} else if (event.keyCode == '83') {
+        cls();
+        // S == Start
+		console.log("start");
+		count=15*60+1; // 15 minuten. 
+        clearCounter();
+		
+		counter=setInterval(timer, 1001); //1000 will  run it every 1 second
+		timer();
+
+	} else if (event.keyCode == '68') {
+        // D == Reset , leeg
+		console.log("Reset");
+		clearCounter();
+        cls();
+    } else if (event.keyCode == '70') {
+        // F
+        console.log("Welkom");
+        clearCounter();
+        cls();
+        document.getElementById("welkom").innerHTML="<h1>Welkom bij Trybuut 2014!</h1><BR>";
+    }
+
+	console.log('You pressed '+event.keyCode);
+	event.preventDefault();
+});
+</script>
+
+<style type="text/css">
+#timer {
+	color: white;
+	font-size: 180px;
+	width:500px;
+	margin:0px auto;
+	text-align:left;
+	padding:15px;
+
+}
+#copyright {
+    color: white;
+    font-size: 16px;
+    width:500px;
+    margin:0px auto ;
+    text-align:center ;
+    padding: 0 0 0 0;
+    margin: 0px ;
+}
+#welkom {
+    color: white;
+    font-size: 32px;
+    width:500px;
+    margin:0px auto ;
+    text-align:center ;
+    padding: 0 0 0 0;
+    margin: 0px ;
+}
+
+#eula {
+    color: red;
+    font-family:courier, monospace;
+    font-size:18px;
+    font-weight:bold;
+    border:1px solid #000000;
+}
+    
+body {
+	margin:50px 0px;
+	padding:0px;
+	text-align:center;
+	color: white;
+}
+</style>
+<body bgcolor="black">
+<span id="timer"></span>
+<span id="welkom"></span>        
+
+
+<span id='copyright' style="padding: 0;">
+
+        <h1>Trybuut Countdown - Edition 2014</h1>
+        <h2>&copy; Roel Adriaans</h2>
+<ul>
+  <li>a - Applaus</li>
+  <li>s - Start timer</li>
+  <li>d - Reset - Leeg</li>
+</ul>
+        <span id="eula">
+"If this program accidentally screws up and destroys data on your PC, electrocutes you, makes your monitor explode in your face,
+set's your house on fire, kills you, changes all the text you say in online games to oink, causes everyone on the planet(and beyond)
+to try to kill you, hacks into a nearby nuclear missile and targets your house, changes your bank balance to $0, gets you banned from
+online games, adds your name to a hitman's list, sucks you into the computer and plays pong with you(with you as ball), causes secret
+agencies to come after you, makes you believe you got maggots crawling under your skin, turns your room into a gate to hell, becomes sentient
+and starts killing everyone on this planet, gets you sent to jail with a guy named big bubba or does anything else you don't want it to do,
+don't blame the author of this program!!"
+        </span>
+
+        </span>
+
+
+
+</body>
+</html>
+
