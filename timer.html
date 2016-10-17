@@ -7,9 +7,6 @@
 
 var count=15*60+1; // 15 minuten. 
 
-
-//var counter=setInterval(timer, 1000); //1000 will  run it every 1 second
-
 function timer() {
 	count=count-1;
 	if (count <= 0)	{
@@ -19,8 +16,6 @@ function timer() {
 	}
 
 	//Do code for showing the number of seconds here
-	//var min = count % 60;
-	//var sec = count / 60;
 	var minutes = Math.floor(count / 60);
 	var seconds = count - minutes * 60;
 	document.getElementById("timer").innerHTML=minutes + ":" + pad(seconds, 2, 0);
@@ -145,12 +140,13 @@ body {
 
 <span id='copyright' style="padding: 0;">
 
-        <h1>Trybuut Countdown - Edition 2015</h1>
+        <h1>Trybuut Countdown - Edition 2016</h1>
         <h2>&copy; Roel Adriaans</h2>
 <ul>
   <li>a - Applaus</li>
   <li>s - Start timer</li>
   <li>d - Reset - Leeg</li>
+  <li>f - Welkom scherm</li>
 </ul>
         <span id="eula">
 "If this program accidentally screws up and destroys data on your PC, electrocutes you, makes your monitor explode in your face,
