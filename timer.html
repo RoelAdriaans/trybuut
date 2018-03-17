@@ -1,166 +1,215 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="nl-NL">
+
 <head>
-<title>Brandpunt timer</title>
-<script src="http://code.jquery.com/jquery-1.4.4.js"></script>
-<script type="text/javascript">
+    <title>Verkiezingsdebat Timer</title>
+    <meta charset="utf-8" />
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+    var count_15 = 15 * 60 + 1; // 15 minuten.
+    var count_debat = 10 * 60 + 1; // 10 minuten for debat
+    var count_reaction = 2 * 60 + 1; // 2 minuten for reactie
+    var count = 0;
+    var isPaused = false;
+    var txt_tijdvoorbij = "Tijd voorbij!"
+    var stellingen = [
+        "Helmond moet veel gaan investeren in verbetering van het busvervoer en fietspaden.", // 1
+        "Jongeren onder de 18 jaar en mensen met een minimuminkomen moeten gratis gebruik kunnen maken van een sportclub, concert,- of musea bezoek in Helmond.", // 2
+        "Mag de OZB verhoogd worden om een energie neutrale stad te krijgen?", // 3
+        "Investeren in het Helmond centrum is belangrijker dan investeren in winkelcentra in de wijken.", // 4
+        "Helmond kan beter de eigen bijdrage in de zorg afschaffen dan de parkeertarieven verlagen.", // 5
+        "De politie in Helmond moet een afspiegeling zijn van de Helmondse bevolking qua percentage mannen en vrouwen en percentage inwoners met een migratie-achtergrond.", // 6
+        "De gemeente Helmond moet gratis laptops ter beschikking stellen aan kinderen die opgroeien in armoede.", // 7
+        "Extra debat: Brouwhuis belang",
+    ];
 
-var count=15*60+1; // 15 minuten. 
+    function fillStellingen() {
+        var arrayLength = stellingen.length;
+        for (var i = 0; i < arrayLength; i++) {
+            var ul = document.getElementById("welkom_list");
+            var li = document.createElement("li");
+            var children = ul.children.length + 1
+            li.setAttribute("id", "element" + children)
+            var txt = (i + 1) + " -  " + stellingen[i];
+            li.appendChild(document.createTextNode(txt));
+            ul.appendChild(li)
 
-function timer() {
-	count=count-1;
-	if (count <= 0)	{
-		clearCounter();
-		document.getElementById("timer").innerHTML="Applaus!"; // watch for spelling  
-		return;
-	}
-
-	//Do code for showing the number of seconds here
-	var minutes = Math.floor(count / 60);
-	var seconds = count - minutes * 60;
-	document.getElementById("timer").innerHTML=minutes + ":" + pad(seconds, 2, 0);
-}
-
-function pad(n, width, z) {
-  z = z || '0';
-  n = n + '';
-  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
-}
-
-function restart() {
-    clearCounter();
-	var count=15*60+1; // 15 minuten. 
-	counter=setInterval(timer, 1000); //1000 will  run it every 1 second	
-}
-
-function clearCounter() {
-    if (typeof counter === 'undefined') {
-        console.log("No counter cleared");
-    } else {
-        clearInterval(counter);
-        console.log("Counter cleared");
-    }
-}
-function cls() {
-        document.getElementById("timer").innerHTML=""; 
-        document.getElementById("welkom").innerHTML=""; 
-        document.getElementById("copyright").innerHTML="";
-}
-
-function myFunction() {
-	console.log(event.keyCode);
-}
-
-$(document).keydown(function(event) {
-	if (event.keyCode == '65') {
-        // A = Applaus
-        clearCounter();
-        
-		console.log("Applaus!");
-		cls();
-		document.getElementById("timer").innerHTML="Applaus!";
-        
-		count = 0;
-	} else if (event.keyCode == '83') {
-        cls();
-        // S == Start
-		console.log("start");
-		count=15*60+1; // 15 minuten. 
-        clearCounter();
-		
-		counter=setInterval(timer, 1001); //1000 will  run it every 1 second
-		timer();
-
-	} else if (event.keyCode == '68') {
-        // D == Reset , leeg
-		console.log("Reset");
-		clearCounter();
-        cls();
-    } else if (event.keyCode == '70') {
-        // F
-        console.log("Welkom");
-        clearCounter();
-        cls();
-        document.getElementById("welkom").innerHTML="<h1>Welkom bij Trybuut 2015!</h1><BR>";
+        }
     }
 
-	console.log('You pressed '+event.keyCode);
-	event.preventDefault();
-});
-</script>
+    function timer() {
+        if (!isPaused) {
+            count = count - 1;
+        }
 
-<style type="text/css">
-#timer {
-	color: white;
-	font-size: 180px;
-	width:500px;
-	margin:0px auto;
-	text-align:left;
-	padding:15px;
+        if (count <= 0) {
+            clearCounter();
+            document.getElementById("timer").innerHTML = txt_tijdvoorbij; // watch for spelling
+            return;
+        }
 
-}
-#copyright {
-    color: white;
-    font-size: 16px;
-    width:500px;
-    margin:0px auto ;
-    text-align:center ;
-    padding: 0 0 0 0;
-    margin: 0px ;
-}
-#welkom {
-    color: white;
-    font-size: 32px;
-    width:500px;
-    margin:0px auto ;
-    text-align:center ;
-    padding: 0 0 0 0;
-    margin: 0px ;
-}
+        //Do code for showing the number of seconds here
+        var minutes = Math.floor(count / 60);
+        var seconds = count - minutes * 60;
+        document.getElementById("timer").innerHTML = minutes + ":" + pad(seconds, 2, 0);
+    }
 
-#eula {
-    color: red;
-    font-family:courier, monospace;
-    font-size:18px;
-    font-weight:bold;
-    border:1px solid #000000;
-}
-    
-body {
-	margin:50px 0px;
-	padding:0px;
-	text-align:center;
-	color: white;
-}
-</style>
-<body bgcolor="black">
-<span id="timer"></span>
-<span id="welkom"></span>        
+    function pad(n, width, z) {
+        z = z || '0';
+        n = n + '';
+        return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+    }
 
+    function restart_debat() {
+        clearCounter();
+        var count = count_debat; // Timer for debat
+        counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+    }
 
-<span id='copyright' style="padding: 0;">
+    function restart_reaction() {
+        clearCounter();
+        var count = count_reaction; // Timer for reaction
+        counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+    }
 
-        <h1>Trybuut Countdown - Edition 2016</h1>
-        <h2>&copy; Roel Adriaans</h2>
-<ul>
-  <li>a - Applaus</li>
-  <li>s - Start timer</li>
-  <li>d - Reset - Leeg</li>
-  <li>f - Welkom scherm</li>
-</ul>
-        <span id="eula">
-"If this program accidentally screws up and destroys data on your PC, electrocutes you, makes your monitor explode in your face,
-set's your house on fire, kills you, changes all the text you say in online games to oink, causes everyone on the planet(and beyond)
-to try to kill you, hacks into a nearby nuclear missile and targets your house, changes your bank balance to $0, gets you banned from
-online games, adds your name to a hitman's list, sucks you into the computer and plays pong with you(with you as ball), causes secret
-agencies to come after you, makes you believe you got maggots crawling under your skin, turns your room into a gate to hell, becomes sentient
-and starts killing everyone on this planet, gets you sent to jail with a guy named big bubba or does anything else you don't want it to do,
-don't blame the author of this program!!"
+    function clearCounter() {
+        if (typeof counter === 'undefined') {
+            console.log("No counter cleared");
+        } else {
+            isPaused = false;
+            clearInterval(counter);
+            console.log("Counter cleared");
+        }
+    }
+
+    function cls() {
+        document.getElementById("timer").innerHTML = "";
+        document.getElementById("welkom").innerHTML = "";
+        document.getElementById("copyright").innerHTML = "";
+    }
+
+    $(document).keydown(function(event) {
+        if (event.keyCode == 'A'.charCodeAt()) {
+            // Text voorbij , used to be applaus
+            clearCounter();
+            console.log("txt_tijdvoorbij display");
+            cls();
+            document.getElementById("timer").innerHTML = txt_tijdvoorbij;
+
+            count = 0;
+        } else if (event.keyCode == 'S'.charCodeAt()) {
+            cls();
+            // Start debat 10 MINUTEN
+            console.log("start 10 minuten");
+            count = count_debat;
+            clearCounter();
+
+            counter = setInterval(timer, 1001); //1000 will  run it every 1 second
+            timer();
+        } else if (event.keyCode == 'D'.charCodeAt()) {
+            cls();
+            // Start debat 2 MINUTEN
+            console.log("start 2 minuten");
+            count = count_reaction;
+            clearCounter();
+
+            counter = setInterval(timer, 1001); //1000 will  run it every 1 second
+            timer();
+
+        } else if (event.keyCode == 'F'.charCodeAt()) {
+            console.log("Pause");
+            isPaused = !isPaused;
+
+        } else if (event.keyCode == 'G'.charCodeAt()) {
+            // Reset , leeg
+            console.log("Reset");
+            clearCounter();
+            cls();
+        } else if (event.keyCode == 'H'.charCodeAt()) {
+
+            console.log("Welkom");
+            clearCounter();
+            cls();
+            document.getElementById("welkom").innerHTML = "<h1>Welkom bij het <br/>Ditisonzewijk verkiezingsdebat!</h1><BR>";
+        }
+
+        console.log('You pressed ' + event.keyCode);
+        //event.preventDefault();
+    });
+    </script>
+
+    <style type="text/css">
+    #timer {
+        color: white;
+        font-size: 180px;
+        width: 500px;
+        margin: 0px auto;
+        text-align: left;
+        padding: 15px;
+
+    }
+
+    #copyright {
+        color: white;
+        font-size: 16px;
+        width: 500px;
+        margin: 0px auto;
+        text-align: center;
+        padding: 0 0 0 0;
+        margin: 0px;
+    }
+
+    #welkom {
+        color: white;
+        font-size: 32px;
+        width: 500px;
+        margin: 0px auto;
+        text-align: center;
+        padding: 0 0 0 0;
+        margin: 0px;
+    }
+
+    #eula {
+        color: red;
+        font-family: courier, monospace;
+        font-size: 18px;
+        font-weight: bold;
+        border: 1px solid #000000;
+    }
+
+    body {
+        margin: 50px 0px;
+        padding: 0px;
+        text-align: center;
+        color: white;
+    }
+    </style>
+
+    <body bgcolor="black" onload="fillStellingen()">
+        <span id="timer"></span>
+
+        <span id="welkom"></span>
+
+        <span id='copyright' style="padding: 0;">
+            <h1>Verkiezingsdebat edition 2018</h1>
+            <h2>&copy; Roel Adriaans</h2>
+            <ul id="welkom_list">
+                <li>a - Einde tijd</li>
+                <li>s - Start timer 10 minuten</li>
+                <li>d - Start timer 2 minuten</li>
+                <li>f - Pause</li>
+                <li>g - Reset - Leeg</li>
+                <li>h - Welkom scherm</li>
+            </ul>
+            <span id="eula">
+                "If this program accidentally screws up and destroys data on your PC, electrocutes you, makes your monitor explode in your face,
+                set's your house on fire, kills you, changes all the text you say in online games to oink, causes everyone on the planet(and beyond)
+                to try to kill you, hacks into a nearby nuclear missile and targets your house, changes your bank balance to $0, gets you banned from
+                online games, adds your name to a hitman's list, sucks you into the computer and plays pong with you(with you as ball), causes secret
+                agencies to come after you, makes you believe you got maggots crawling under your skin, turns your room into a gate to hell, becomes sentient
+                and starts killing everyone on this planet, gets you sent to jail with a guy named big bubba or does anything else you don't want it to do,
+                don't blame the author of this program!!"
+            </span>
         </span>
-
-        </span>
-
-
-
-</body>
-</html>
+    </body>
+    </html>
