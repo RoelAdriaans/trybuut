@@ -15,7 +15,7 @@
     var stellingen = [
         "Helmond moet veel gaan investeren in verbetering van het busvervoer en fietspaden.", // 1
         "Jongeren onder de 18 jaar en mensen met een minimuminkomen moeten gratis gebruik kunnen maken van een sportclub, concert,- of musea bezoek in Helmond.", // 2
-        "Mag de OZB verhoogd worden om een energie neutrale stad te krijgen?", // 3
+        "Mag de OZB verhoogd worden om een energieneutrale stad te krijgen?", // 3
         "Investeren in het Helmond centrum is belangrijker dan investeren in winkelcentra in de wijken.", // 4
         "Helmond kan beter de eigen bijdrage in de zorg afschaffen dan de parkeertarieven verlagen.", // 5
         "De politie in Helmond moet een afspiegeling zijn van de Helmondse bevolking qua percentage mannen en vrouwen en percentage inwoners met een migratie-achtergrond.", // 6
@@ -70,6 +70,22 @@
         clearCounter();
         var count = count_reaction; // Timer for reaction
         counter = setInterval(timer, 1000); //1000 will  run it every 1 second
+    }
+    function setStelling(number) {
+        if (!(number >= 0 && number <= 10)) {
+            console.warning('Incorrect number in setStelling! : ' + number)
+            return false;
+        }
+        console.log("Setting stelling" + number);
+        if (number  == 0) {
+            document.getElementById("stelling").innerHTML = "";
+        } else {
+            number--;
+            if (stellingen[number]) {
+                document.getElementById("stelling").innerHTML = stellingen[number] + "<br/>";
+            }
+        }
+
     }
 
     function clearCounter() {
@@ -131,14 +147,32 @@
             clearCounter();
             cls();
             document.getElementById("welkom").innerHTML = "<h1>Welkom bij het <br/>Ditisonzewijk verkiezingsdebat!</h1><BR>";
+        } else if (event.keyCode >= 48 && event.keyCode <= 57) {
+            console.log("Pressed number :" + (event.keyCode-48));
+            setStelling((event.keyCode-48));
+        } else if (event.keyCode >= 96 && event.keyCode <= 105) {
+            console.log("Pressed keypad number :" + (event.keyCode-96));
+            setStelling((event.keyCode-96));
+        } else {
+            console.log('You pressed ' + event.keyCode);
         }
 
-        console.log('You pressed ' + event.keyCode);
+
         //event.preventDefault();
     });
     </script>
 
     <style type="text/css">
+    #stelling {
+        color: white;
+        font-size: 50px;
+        width: 500px;
+        margin: 0px auto;
+        text-align: left;
+        padding: 15px;
+
+    }
+
     #timer {
         color: white;
         font-size: 180px;
@@ -186,6 +220,7 @@
     </style>
 
     <body bgcolor="black" onload="fillStellingen()">
+        <span id="stelling"></span>
         <span id="timer"></span>
 
         <span id="welkom"></span>
@@ -200,6 +235,7 @@
                 <li>f - Pause</li>
                 <li>g - Reset - Leeg</li>
                 <li>h - Welkom scherm</li>
+                <li>0 - Leeg stelling</li>
             </ul>
             <span id="eula">
                 "If this program accidentally screws up and destroys data on your PC, electrocutes you, makes your monitor explode in your face,
